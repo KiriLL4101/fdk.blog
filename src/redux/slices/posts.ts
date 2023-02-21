@@ -1,85 +1,82 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { Action } from "@remix-run/router";
-import axios from "../../axios";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import axios from '../../axios'
 
 export const fetchPosts = createAsyncThunk<
   any[],
   any,
   {
-    rejectValue: any;
+    rejectValue: any
   }
->("posts/fetchPosts", async (): Promise<any> => {
-  const { data } = await axios.get("/posts");
-  return data;
-});
+>('posts/fetchPosts', async (): Promise<any> => {
+  const { data } = await axios.get('/posts')
+  return data
+})
 
 export const fetchTags = createAsyncThunk<
   any[],
   any,
   {
-    rejectValue: any;
+    rejectValue: any
   }
->("posts/fetchTags", async (): Promise<any> => {
-  const { data } = await axios.get("/tags");
-  return data;
-});
+>('posts/fetchTags', async (): Promise<any> => {
+  const { data } = await axios.get('/tags')
+  return data
+})
 
 export const fetchRemovePost = createAsyncThunk<
   any[],
   any,
   {
-    rejectValue: any;
+    rejectValue: any
   }
->("posts/fetchRemovePost", async (id) => axios.delete(`/posts/${id}`));
+>('posts/fetchRemovePost', async (id) => axios.delete(`/posts/${id}`))
 
 const initialState = {
   posts: {
     items: [],
-    status: "loading",
+    status: 'loading',
   },
   tags: {
     items: [],
-    status: "loading",
+    status: 'loading',
   },
-};
+}
 
 const postsSlice = createSlice({
-  name: "posts",
+  name: 'posts',
   initialState,
   reducers: {},
   extraReducers: {
     [fetchPosts.pending]: (state) => {
-      state.posts.items = [];
-      state.posts.status = "loading";
+      state.posts.items = []
+      state.posts.status = 'loading'
     },
     [fetchPosts.fulfilled]: (state, action) => {
-      state.posts.items = action.payload;
-      state.posts.status = "loaded";
+      state.posts.items = action.payload
+      state.posts.status = 'loaded'
     },
     [fetchPosts.rejected]: (state) => {
-      state.posts.items = [];
-      state.posts.status = "error";
+      state.posts.items = []
+      state.posts.status = 'error'
     },
     //==========
     [fetchTags.pending]: (state) => {
-      state.tags.items = [];
-      state.tags.status = "loading";
+      state.tags.items = []
+      state.tags.status = 'loading'
     },
     [fetchTags.fulfilled]: (state, action) => {
-      state.tags.items = action.payload;
-      state.tags.status = "loaded";
+      state.tags.items = action.payload
+      state.tags.status = 'loaded'
     },
     [fetchTags.rejected]: (state) => {
-      state.tags.items = [];
-      state.tags.status = "error";
+      state.tags.items = []
+      state.tags.status = 'error'
     },
     //===========
     [fetchRemovePost.pending]: (state, action) => {
-      state.posts.items = state.posts.items.filter(
-        (obj) => obj._id !== action.meta.arg
-      );
+      state.posts.items = state.posts.items.filter((obj) => obj._id !== action.meta.arg)
     },
   },
-});
+})
 
-export const postsReducer = postsSlice.reducer;
+export const postsReducer = postsSlice.reducer
